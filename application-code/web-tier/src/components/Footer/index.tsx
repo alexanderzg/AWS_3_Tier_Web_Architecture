@@ -18,7 +18,7 @@ function Footer() {
       >
         <Box>
           <Typography variant="subtitle1">
-            &copy; 2024 - CPSC Front Of Class
+            &copy; 2024 - CPSC 465 Front Of Class
           </Typography>
         </Box>
         {/* <Typography

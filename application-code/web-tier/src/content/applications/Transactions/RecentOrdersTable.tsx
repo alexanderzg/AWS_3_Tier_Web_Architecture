@@ -26,49 +26,47 @@ import {
 } from '@mui/material';
 
 import Label from 'src/components/Label';
-import { CryptoOrder, CryptoOrderStatus } from 'src/models/crypto_order';
+import { MovieEntry } from 'src/models/movieEntry';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
 
-interface RecentOrdersTableProps {
-  className?: string;
-  cryptoOrders: CryptoOrder[];
-}
-
 interface Filters {
-  status?: CryptoOrderStatus;
+  status?: any;
 }
 
-const getStatusLabel = (cryptoOrderStatus: CryptoOrderStatus): JSX.Element => {
+const getStatusLabel = (cryptoOrderStatus: any): JSX.Element => {
   const map = {
-    failed: {
-      text: 'Failed',
+    horror: {
+      text: 'Horror',
       color: 'error'
     },
-    completed: {
-      text: 'Completed',
+    comedy: {
+      text: 'Comedy',
       color: 'success'
     },
-    pending: {
-      text: 'Pending',
+    action: {
+      text: 'Action',
       color: 'warning'
     }
   };
 
-  const { text, color }: any = map[cryptoOrderStatus];
-
-  return <Label color={color}>{text}</Label>;
+  try {
+    const { text, color }: any = map[cryptoOrderStatus];
+    return <Label color={color}>{text}</Label>;
+  } catch (e) {
+    return <Label color="info">Other</Label>;
+  }
 };
 
 const applyFilters = (
-  cryptoOrders: CryptoOrder[],
+  movieEntry: MovieEntry[],
   filters: Filters
-): CryptoOrder[] => {
-  return cryptoOrders.filter((cryptoOrder) => {
+): MovieEntry[] => {
+  return movieEntry.filter((movie) => {
     let matches = true;
 
-    if (filters.status && cryptoOrder.status !== filters.status) {
+    if (filters.status && movie.genre !== filters.status) {
       matches = false;
     }
 
@@ -77,14 +75,22 @@ const applyFilters = (
 };
 
 const applyPagination = (
-  cryptoOrders: CryptoOrder[],
+  movieEntry: MovieEntry[],
   page: number,
   limit: number
-): CryptoOrder[] => {
-  return cryptoOrders.slice(page * limit, page * limit + limit);
+): MovieEntry[] => {
+  return movieEntry.slice(page * limit, page * limit + limit);
 };
 
-const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
+interface Props {
+  movieEntry: MovieEntry[],
+  deleteMovieEntry: (movie: MovieEntry) => void;
+}
+
+const RecentOrdersTable = ({
+  movieEntry,
+  deleteMovieEntry
+}:Props) => {
   const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>(
     []
   );
@@ -101,16 +107,16 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
       name: 'All'
     },
     {
-      id: 'completed',
-      name: 'Completed'
+      id: 'horror',
+      name: 'Horror'
     },
     {
-      id: 'pending',
-      name: 'Pending'
+      id: 'comedy',
+      name: 'Comedy'
     },
     {
-      id: 'failed',
-      name: 'Failed'
+      id: 'action',
+      name: 'Action'
     }
   ];
 
@@ -132,7 +138,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
   ): void => {
     setSelectedCryptoOrders(
       event.target.checked
-        ? cryptoOrders.map((cryptoOrder) => cryptoOrder.id)
+        ? movieEntry.map((movie) => movie.id)
         : []
     );
   };
@@ -161,17 +167,17 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredCryptoOrders = applyFilters(cryptoOrders, filters);
-  const paginatedCryptoOrders = applyPagination(
+  const filteredCryptoOrders = applyFilters(movieEntry, filters);
+  const paginateMovies = applyPagination(
     filteredCryptoOrders,
     page,
     limit
   );
   const selectedSomeCryptoOrders =
     selectedCryptoOrders.length > 0 &&
-    selectedCryptoOrders.length < cryptoOrders.length;
+    selectedCryptoOrders.length < movieEntry.length;
   const selectedAllCryptoOrders =
-    selectedCryptoOrders.length === cryptoOrders.length;
+    selectedCryptoOrders.length === movieEntry.length;
   const theme = useTheme();
 
   return (
@@ -218,23 +224,23 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
                   onChange={handleSelectAllCryptoOrders}
                 />
               </TableCell>
-              <TableCell>Order Details</TableCell>
-              <TableCell>Order ID</TableCell>
-              <TableCell>Source</TableCell>
-              <TableCell align="right">Amount</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>Movie ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell align="right">Rating</TableCell>
+              <TableCell align="right">Genre</TableCell>
+              <TableCell align="right">Year</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedCryptoOrders.map((cryptoOrder) => {
+            {paginateMovies.map((movie) => {
               const isCryptoOrderSelected = selectedCryptoOrders.includes(
-                cryptoOrder.id
+                movie.id
               );
               return (
                 <TableRow
                   hover
-                  key={cryptoOrder.id}
+                  key={movie.id}
                   selected={isCryptoOrderSelected}
                 >
                   <TableCell padding="checkbox">
@@ -242,7 +248,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
                       color="primary"
                       checked={isCryptoOrderSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        handleSelectOneCryptoOrder(event, cryptoOrder.id)
+                        handleSelectOneCryptoOrder(event, movie.id)
                       }
                       value={isCryptoOrderSelected}
                     />
@@ -255,10 +261,21 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
                       gutterBottom
                       noWrap
                     >
-                      {cryptoOrder.orderDetails}
+                      {movie.name}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {format(cryptoOrder.orderDate, 'MMMM dd yyyy')}
+                    {/* <Typography variant="body2" color="text.secondary" noWrap>
+                      {format(movie.orderDate, 'MMMM dd yyyy')}
+                    </Typography> */}
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body1"
+                      fontWeight="bold"
+                      color="text.primary"
+                      gutterBottom
+                      noWrap
+                    >
+                      {movie.description}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -269,22 +286,11 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
                       gutterBottom
                       noWrap
                     >
-                      {cryptoOrder.orderID}
+                      {movie.rating}
                     </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {cryptoOrder.sourceName}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {cryptoOrder.sourceDesc}
-                    </Typography>
+                    {/* <Typography variant="body2" color="text.secondary" noWrap>
+                      {movie.sourceDesc}
+                    </Typography> */}
                   </TableCell>
                   <TableCell align="right">
                     <Typography
@@ -294,20 +300,21 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
                       gutterBottom
                       noWrap
                     >
-                      {cryptoOrder.amountCrypto}
-                      {cryptoOrder.cryptoCurrency}
+                      {getStatusLabel(movie.genre)}
+                      {/* {movie.cryptoCurrency} */}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {numeral(cryptoOrder.amount).format(
-                        `${cryptoOrder.currency}0,0.00`
+                    {/* <Typography variant="body2" color="text.secondary" noWrap>
+                      {numeral(movie.amount).format(
+                        `${movie.currency}0,0.00`
                       )}
-                    </Typography>
+                    </Typography> */}
                   </TableCell>
                   <TableCell align="right">
-                    {getStatusLabel(cryptoOrder.status)}
+                    {/* {getStatusLabel(movie.year)} */}
+                    {movie.year}
                   </TableCell>
                   <TableCell align="right">
-                    <Tooltip title="Edit Order" arrow>
+                    {/* <Tooltip title="Edit Order" arrow>
                       <IconButton
                         sx={{
                           '&:hover': {
@@ -320,7 +327,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
                       >
                         <EditTwoToneIcon fontSize="small" />
                       </IconButton>
-                    </Tooltip>
+                    </Tooltip> */}
                     <Tooltip title="Delete Order" arrow>
                       <IconButton
                         sx={{
@@ -329,6 +336,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
                         }}
                         color="inherit"
                         size="small"
+                        onClick={() => deleteMovieEntry(movie)}
                       >
                         <DeleteTwoToneIcon fontSize="small" />
                       </IconButton>
@@ -353,14 +361,6 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
       </Box>
     </Card>
   );
-};
-
-RecentOrdersTable.propTypes = {
-  cryptoOrders: PropTypes.array.isRequired
-};
-
-RecentOrdersTable.defaultProps = {
-  cryptoOrders: []
 };
 
 export default RecentOrdersTable;
