@@ -3,7 +3,6 @@ import { Navigate } from 'react-router-dom';
 import { RouteObject } from 'react-router';
 
 import SidebarLayout from 'src/layouts/SidebarLayout';
-import BaseLayout from 'src/layouts/BaseLayout';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
 
@@ -20,7 +19,7 @@ const Overview = Loader(lazy(() => import('src/content/overview')));
 
 // Dashboards
 
-const Tasks = Loader(lazy(() => import('src/content/dashboards/Tasks')));
+const Tasks = Loader(lazy(() => import('src/content/dashboards/Analytics/AnalyticsPlots')));
 
 // Applications
 
@@ -28,7 +27,7 @@ const Messenger = Loader(
   lazy(() => import('src/content/applications/Messenger'))
 );
 const Transactions = Loader(
-  lazy(() => import('src/content/applications/Transactions'))
+  lazy(() => import('src/content/applications/Movies/Movies'))
 );
 const UserProfile = Loader(
   lazy(() => import('src/content/applications/Users/profile'))
@@ -87,10 +86,10 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Navigate to="tasks" replace />
+        element: <Navigate to="analytics" replace />
       },
       {
-        path: 'tasks',
+        path: 'analytics',
         element: <Tasks />
       },
       {
@@ -105,10 +104,10 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Navigate to="transactions" replace />
+        element: <Navigate to="movies" replace />
       },
       {
-        path: 'transactions',
+        path: 'movies',
         element: <Transactions />
       },
       {

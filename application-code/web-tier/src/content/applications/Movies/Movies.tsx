@@ -1,18 +1,18 @@
 import { Helmet } from 'react-helmet-async';
 import Footer from 'src/components/Footer';
 
-import RecentOrders from './RecentOrders';
+import MovieInventory from './MovieInventory';
 
-function ApplicationsTransactions() {
+function Movies() {
   return (
     <>
       <Helmet>
         <title>Transactions - Applications</title>
       </Helmet>
-      <RecentOrders />
+      <MovieInventory />
       <Footer />
     </>
   );
 }
 
-export default ApplicationsTransactions;
+export default Movies;

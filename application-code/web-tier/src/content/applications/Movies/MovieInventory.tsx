@@ -1,12 +1,13 @@
-import { Button, Card, Container, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, Container, Dialog, DialogTitle, Grid, List, TextField, Typography } from '@mui/material';
 import { MovieEntry } from 'src/models/movieEntry';
-import RecentOrdersTable from './RecentOrdersTable';
 import { subDays } from 'date-fns';
 import useApiService from 'src/hooks/useApiService';
 import { useEffect, useState } from 'react';
 import { OptionsHttpMethods } from 'src/models/optionsValues';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+import { SimpleDialog } from 'src/content/pages/Components/Modals';
+import MovieInventoryTable from './MovieInventoryTable';
 
 const MOVIES: MovieEntry[] = [
   {
@@ -64,9 +65,13 @@ const user = {
   avatar: '/static/images/avatars/1.jpg'
 };
 
-function RecentOrders() {
+function MovieInventory() {
   const { httpRequest } = useApiService();
   const [movies, setMovies] = useState<MovieEntry[]>([]);
+  const [newMovie, setNewMovie] = useState<MovieEntry>(new MovieEntry());
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const formTemplate = new MovieEntry();
+
   useEffect(() => {
     getMovieData();
   }, []);
@@ -83,14 +88,8 @@ function RecentOrders() {
   }
 
   const addMovieEntry = () => {
-    const body = {
-      name: "test",
-      description: "test description",
-      rating: 10,
-      genre: "action",
-      year: 2024
-    }
-    httpRequest(OptionsHttpMethods.POST, '/api/transaction', body)
+    console.log(newMovie);
+    httpRequest(OptionsHttpMethods.POST, '/api/transaction', newMovie)
     .then((_response) => {
       console.log(_response);
       getMovieData();
@@ -110,26 +109,45 @@ function RecentOrders() {
     })
   }
 
+  const handleClose = () => {
+    setOpenDialog(false);
+  }
+
+  const handleOpen = () => {
+    setOpenDialog(true);
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(event.target.name);
+    // console.log(event.target.value);
+    setNewMovie({...newMovie, [event.target.name]: event.target.value })
+  }
+
+  const areAllPropertiesFilled = (obj: MovieEntry): boolean => {
+    return Object.values(obj).every(value => 
+        value !== null && value !== undefined && value !== ''
+    );
+  }
   return (
     <>
       <PageTitleWrapper>
       <Grid container justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography variant="h3" component="h3" gutterBottom>
-            Transactions
+            Movie Inventory
           </Typography>
           <Typography variant="subtitle2">
-            {user.name}, these are your recent transactions
+            Explore the Current Movie Collection
           </Typography>
         </Grid>
         <Grid item>
           <Button
             sx={{ mt: { xs: 2, md: 0 } }}
             variant="contained"
-            onClick={addMovieEntry}
+            onClick={handleOpen}
             startIcon={<AddTwoToneIcon fontSize="small" />}
           >
-            Create transaction
+            Add Movie
           </Button>
         </Grid>
       </Grid>
@@ -144,13 +162,34 @@ function RecentOrders() {
         >
           <Grid item xs={12}>
             <Card>
-              <RecentOrdersTable movieEntry={movies} deleteMovieEntry={deleteMovieEntry}/>
+              <MovieInventoryTable movieEntry={movies} deleteMovieEntry={deleteMovieEntry}/>
             </Card>
           </Grid>
         </Grid>
       </Container>
+      <Dialog fullWidth maxWidth={"xs"} onClose={handleClose} open={openDialog}>
+        <DialogTitle>Enter Movie Information</DialogTitle>
+        <Box sx={{ px: 2, pb: 2 }}>
+          {Object.keys(formTemplate).map((_entry, _index) => {
+            console.log(_entry);
+            return _entry !== "id" && <Box key={`${_entry}_${_index}`} sx={{ p: 1 }}>
+              <TextField
+                id="outlined-controlled"
+                fullWidth
+                label={_entry}
+                name={_entry}
+                value={newMovie ? newMovie[_entry] : ""}
+                onChange={handleChange}
+              />
+            </Box>
+          })}
+          <Box sx={{ p: 1 }}>
+            <Button fullWidth disabled={!areAllPropertiesFilled(newMovie)} variant='contained' onClick={addMovieEntry}>Submit</Button>
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }
 
-export default RecentOrders;
+export default MovieInventory;

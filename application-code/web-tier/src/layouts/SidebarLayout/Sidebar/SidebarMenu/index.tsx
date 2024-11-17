@@ -195,10 +195,10 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/dashboards/tasks"
+                  to="/dashboards/analytics"
                   startIcon={<BrightnessLowTwoToneIcon />}
                 >
-                  Manage Tasks
+                  Movie Analytics
                 </Button>
               </ListItem>
               <ListItem component="div">
@@ -230,10 +230,10 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/management/transactions"
+                  to="/management/movies"
                   startIcon={<TableChartTwoToneIcon />}
                 >
-                  Transactions List
+                  Movies
                 </Button>
               </ListItem>
             </List>

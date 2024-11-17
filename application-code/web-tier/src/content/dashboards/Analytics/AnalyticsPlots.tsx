@@ -1,6 +1,5 @@
 import { ChangeEvent, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import PageHeader from './PageHeader';
 import Footer from 'src/components/Footer';
 import {
   Grid,
@@ -12,10 +11,12 @@ import {
   Box,
   useTheme,
   Avatar,
-  styled
+  styled,
+  Typography,
+  Button
 } from '@mui/material';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import TeamOverview from './TeamOverview';
 import TasksAnalytics from './TasksAnalytics';
 import Performance from './Performance';
@@ -23,6 +24,7 @@ import Projects from './Projects';
 import Checklist from './Checklist';
 import Profile from './Profile';
 import TaskSearch from './TaskSearch';
+import AnalyticsPlots from './Analytic';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `
@@ -106,7 +108,7 @@ const TabsContainerWrapper = styled(Box)(
   `
 );
 
-function DashboardTasks() {
+function Analytics() {
   const theme = useTheme();
 
   const [currentTab, setCurrentTab] = useState<string>('analytics');
@@ -126,7 +128,28 @@ function DashboardTasks() {
         <title>Tasks Dashboard</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+      <Box
+      display="flex"
+      alignItems={{ xs: 'stretch', md: 'center' }}
+      flexDirection={{ xs: 'column', md: 'row' }}
+      justifyContent="space-between"
+    >
+      <Box display="flex" alignItems="center">
+        <Box>
+          <Typography variant="h3" component="h3" gutterBottom>
+            Movie Analytics
+          </Typography>
+          <Typography variant="subtitle2">
+            Insights from the Current Movie Analytics
+          </Typography>
+        </Box>
+      </Box>
+      <Box mt={{ xs: 3, md: 0 }}>
+        <Button variant="contained" startIcon={<PlayCircleFilledWhiteIcon />}>
+          Run
+        </Button>
+      </Box>
+    </Box>
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <TabsContainerWrapper>
@@ -212,9 +235,7 @@ function DashboardTasks() {
             )}
             {currentTab === 'taskSearch' && (
               <Grid item xs={12}>
-                <Box p={4}>
-                  <TaskSearch />
-                </Box>
+                <AnalyticsPlots />
               </Grid>
             )}
           </Grid>
@@ -225,4 +246,4 @@ function DashboardTasks() {
   );
 }
 
-export default DashboardTasks;
+export default Analytics;

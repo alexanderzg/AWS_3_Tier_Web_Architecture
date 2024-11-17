@@ -87,7 +87,7 @@ interface Props {
   deleteMovieEntry: (movie: MovieEntry) => void;
 }
 
-const RecentOrdersTable = ({
+const MovieInventoryTable = ({
   movieEntry,
   deleteMovieEntry
 }:Props) => {
@@ -224,12 +224,13 @@ const RecentOrdersTable = ({
                   onChange={handleSelectAllCryptoOrders}
                 />
               </TableCell>
-              <TableCell>Movie ID</TableCell>
+              {/* <TableCell>Movie ID</TableCell> */}
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
-              <TableCell align="right">Rating</TableCell>
-              <TableCell align="right">Genre</TableCell>
-              <TableCell align="right">Year</TableCell>
+              <TableCell>Rating</TableCell>
+              <TableCell>Genre</TableCell>
+              <TableCell>Year</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -292,7 +293,7 @@ const RecentOrdersTable = ({
                       {movie.sourceDesc}
                     </Typography> */}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                     <Typography
                       variant="body1"
                       fontWeight="bold"
@@ -309,11 +310,11 @@ const RecentOrdersTable = ({
                       )}
                     </Typography> */}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                     {/* {getStatusLabel(movie.year)} */}
                     {movie.year}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                     {/* <Tooltip title="Edit Order" arrow>
                       <IconButton
                         sx={{
@@ -363,4 +364,4 @@ const RecentOrdersTable = ({
   );
 };
 
-export default RecentOrdersTable;
+export default MovieInventoryTable;
