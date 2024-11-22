@@ -3,8 +3,34 @@ import { useEffect, useState } from 'react';
 import useApiService from 'src/hooks/useApiService';
 import { OptionsHttpMethods } from 'src/models/optionsValues';
 import Plot from 'src/components/Plot/Plot';
+import { PlotSeries } from 'src/models/seriesPlot';
 
-const dummyData = [{"name":"Bicep","data":[{"y":"54cm","x":"2024-09-28T07:00:00.000Z"},{"y":"53.5cm","x":"2024-07-06T07:00:00.000Z"},{"y":"43cm","x":"2023-07-29T07:00:00.000Z"},{"y":"53cm","x":"2022-11-19T08:00:00.000Z"},{"y":"52cm","x":"2022-08-06T07:00:00.000Z"},{"y":"52cm","x":"2022-05-21T07:00:00.000Z"},{"y":"52cm","x":"2022-02-12T08:00:00.000Z"}]},{"name":"Forearm","data":[{"y":"49cm","x":"2024-09-28T07:00:00.000Z"},{"y":"48cm","x":"2024-07-06T07:00:00.000Z"},{"y":"48cm","x":"2023-07-29T07:00:00.000Z"},{"y":"48cm","x":"2022-11-19T08:00:00.000Z"},{"y":"47cm","x":"2022-08-06T07:00:00.000Z"},{"y":"47cm","x":"2022-05-21T07:00:00.000Z"},{"y":"47cm","x":"2022-02-12T08:00:00.000Z"}]}]
+const dummyData: PlotSeries[] = [
+  {
+    "name": "Bicep",
+    "data":[
+      {"y":54,"x": new Date("2024-09-28T07:00:00.000Z")},
+      {"y":53.5,"x":new Date("2024-07-06T07:00:00.000Z")},
+      {"y":43,"x":new Date("2023-07-29T07:00:00.000Z")},
+      {"y":53,"x":new Date("2022-11-19T08:00:00.000Z")},
+      {"y":52,"x":new Date("2022-08-06T07:00:00.000Z")},
+      {"y":52,"x":new Date("2022-05-21T07:00:00.000Z")},
+      {"y":52,"x":new Date("2022-02-12T08:00:00.000Z")}
+    ]
+  },
+    {
+      "name":"Forearm",
+      "data":[
+        {"y":49,"x":new Date("2024-09-28T07:00:00.000Z")},
+        {"y":48,"x":new Date("2024-07-06T07:00:00.000Z")},
+        {"y":48,"x":new Date("2023-07-29T07:00:00.000Z")},
+        {"y":48,"x":new Date("2022-11-19T08:00:00.000Z")},
+        {"y":47,"x":new Date("2022-08-06T07:00:00.000Z")},
+        {"y":47,"x":new Date("2022-05-21T07:00:00.000Z")},
+        {"y":47,"x":new Date("2022-02-12T08:00:00.000Z")}
+      ]
+  }
+]
 
 function AnalyticsPlots() {
   const theme = useTheme();

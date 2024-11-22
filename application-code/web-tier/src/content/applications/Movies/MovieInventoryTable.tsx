@@ -32,10 +32,10 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
 
 interface Filters {
-  status?: any;
+  genre?: any;
 }
 
-const getStatusLabel = (cryptoOrderStatus: any): JSX.Element => {
+const getStatusLabel = (cryptoOrderStatus: string[]): JSX.Element => {
   const map = {
     horror: {
       text: 'Horror',
@@ -51,9 +51,13 @@ const getStatusLabel = (cryptoOrderStatus: any): JSX.Element => {
     }
   };
 
+
   try {
-    const { text, color }: any = map[cryptoOrderStatus];
-    return <Label color={color}>{text}</Label>;
+    const labels = cryptoOrderStatus.map((_genre, _index) => {
+      const { text, color }: any = map[_genre];
+      return <span key={`${_genre}_${_index}`}><Label color={color}>{text}</Label>&nbsp;</span>;
+    });
+    return <>{labels}</>;
   } catch (e) {
     return <Label color="info">Other</Label>;
   }
@@ -65,8 +69,8 @@ const applyFilters = (
 ): MovieEntry[] => {
   return movieEntry.filter((movie) => {
     let matches = true;
-
-    if (filters.status && movie.genre !== filters.status) {
+    const hasOneOrMore = movie.genres.find((_entry) => _entry === filters.genre);
+    if (filters.genre && !Boolean(hasOneOrMore)) {
       matches = false;
     }
 
@@ -98,7 +102,7 @@ const MovieInventoryTable = ({
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
-    status: null
+    genre: null
   });
 
   const statusOptions = [
@@ -129,7 +133,7 @@ const MovieInventoryTable = ({
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      status: value
+      genre: value
     }));
   };
 
@@ -192,11 +196,11 @@ const MovieInventoryTable = ({
           action={
             <Box width={150}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel>Status</InputLabel>
+                <InputLabel>Genre</InputLabel>
                 <Select
-                  value={filters.status || 'all'}
+                  value={filters.genre || 'all'}
                   onChange={handleStatusChange}
-                  label="Status"
+                  label="Genre"
                   autoWidth
                 >
                   {statusOptions.map((statusOption) => (
@@ -234,14 +238,14 @@ const MovieInventoryTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginateMovies.map((movie) => {
+            {paginateMovies.map((movie, _index) => {
               const isCryptoOrderSelected = selectedCryptoOrders.includes(
                 movie.id
               );
               return (
                 <TableRow
                   hover
-                  key={movie.id}
+                  key={`${movie.id}_${_index}`}
                   selected={isCryptoOrderSelected}
                 >
                   <TableCell padding="checkbox">
@@ -301,7 +305,7 @@ const MovieInventoryTable = ({
                       gutterBottom
                       noWrap
                     >
-                      {getStatusLabel(movie.genre)}
+                      {getStatusLabel(movie.genres)}
                       {/* {movie.cryptoCurrency} */}
                     </Typography>
                     {/* <Typography variant="body2" color="text.secondary" noWrap>

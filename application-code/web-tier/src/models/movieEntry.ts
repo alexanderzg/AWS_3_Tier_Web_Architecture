@@ -3,6 +3,8 @@ export class MovieEntry {
   name: string = "";
   description: string = "";
   rating: number = 0;
-  genre: string = "";
   year: number = 0;
+  tagLine: string = "";
+  minutes: number = 0;
+  genres: string[] = [];
 }

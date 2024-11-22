@@ -1,4 +1,4 @@
-import { Box, Button, Card, Container, Dialog, DialogTitle, Grid, List, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, Checkbox, Container, Dialog, DialogTitle, FormControlLabel, FormGroup, FormLabel, Grid, List, TextField, Typography } from '@mui/material';
 import { MovieEntry } from 'src/models/movieEntry';
 import { subDays } from 'date-fns';
 import useApiService from 'src/hooks/useApiService';
@@ -15,48 +15,60 @@ const MOVIES: MovieEntry[] = [
     name: 'Fiat Deposit',
     description: 'completed',
     rating: 5,
-    genre: 'horror',
-    year: 2002
+    genres: ['horror', 'action'],
+    year: 2222,
+    tagLine: "Awesome",
+    minutes: 100
   },
   {
     id: '2',
     name: 'Fiat Deposit',
     description: 'completed',
     rating: 5,
-    genre: 'comedy',
-    year: 2002
+    genres: ['horror'],
+    year: 2000,
+    tagLine: "Awesome",
+    minutes: 100
   },
   {
     id: '3',
     name: 'Fiat Deposit',
     description: 'completed',
     rating: 5,
-    genre: 'action',
-    year: 2002
+    genres: ['horror'],
+    year: 2000,
+    tagLine: "Awesome",
+    minutes: 100
   },
   {
     id: '4',
     name: 'Fiat Deposit',
     description: 'completed',
     rating: 5,
-    genre: '*** 1111',
-    year: 2002
+    genres: ['horror'],
+    year: 2000,
+    tagLine: "Awesome",
+    minutes: 100
   },
   {
     id: '5',
     name: 'Fiat Deposit',
     description: 'completed',
     rating: 5,
-    genre: '*** 1111',
-    year: 2002
+    genres: ['horror'],
+    year: 2000,
+    tagLine: "Awesome",
+    minutes: 100
   },
   {
     id: '6',
     name: 'Fiat Deposit',
     description: 'completed',
     rating: 5,
-    genre: '*** 1111',
-    year: 2002
+    genres: ['horror'],
+    year: 2000,
+    tagLine: "Awesome",
+    minutes: 100
   },
 ];
 
@@ -89,24 +101,26 @@ function MovieInventory() {
 
   const addMovieEntry = () => {
     console.log(newMovie);
-    httpRequest(OptionsHttpMethods.POST, '/api/transaction', newMovie)
-    .then((_response) => {
-      console.log(_response);
-      getMovieData();
-    }).catch((error) => {
-      console.log(error);
-    })
+    setMovies((prev) => [{...newMovie, id: String(movies.length + 1)}, ...prev]);
+    handleClose();
+    // httpRequest(OptionsHttpMethods.POST, '/api/transaction', newMovie)
+    // .then((_response) => {
+    //   console.log(_response);
+    //   getMovieData();
+    // }).catch((error) => {
+    //   console.log(error);
+    // })
   }
 
   const deleteMovieEntry = (movie: MovieEntry) => {
-    console.log(movie);
-    httpRequest(OptionsHttpMethods.DELETE, `/api/transaction/${movie.id}`)
-    .then((_response) => {
-      console.log(_response);
-      getMovieData();
-    }).catch((error) => {
-      console.log(error);
-    })
+    setMovies((prev) => [...prev.filter((_entry) => _entry.id !== movie.id )]);
+    // httpRequest(OptionsHttpMethods.DELETE, `/api/transaction/${movie.id}`)
+    // .then((_response) => {
+    //   console.log(_response);
+    //   getMovieData();
+    // }).catch((error) => {
+    //   console.log(error);
+    // })
   }
 
   const handleClose = () => {
@@ -114,20 +128,33 @@ function MovieInventory() {
   }
 
   const handleOpen = () => {
+    setNewMovie(new MovieEntry());
     setOpenDialog(true);
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(event.target.name);
-    // console.log(event.target.value);
-    setNewMovie({...newMovie, [event.target.name]: event.target.value })
+    if (event.target.type === "checkbox") {
+      if (newMovie.genres.some(_g => _g === event.target.name)) {
+        setNewMovie((prev) => 
+          ({...prev, genres: prev.genres.filter((_entry) => _entry !== event.target.name)})
+        ) 
+      } else {
+        setNewMovie((prev) => 
+          ({...prev, genres: prev.genres.concat(event.target.name)})
+        )
+      }
+    } else {
+      setNewMovie({...newMovie, [event.target.name]: event.target.value });
+    }
   }
 
   const areAllPropertiesFilled = (obj: MovieEntry): boolean => {
-    return Object.values(obj).every(value => 
-        value !== null && value !== undefined && value !== ''
-    );
+    return Object.values(obj).every(value => {
+      if (Array.isArray(value)) return value.length > 0;
+      else return value !== null && value !== undefined && value !== '';
+    });
   }
+
   return (
     <>
       <PageTitleWrapper>
@@ -171,17 +198,32 @@ function MovieInventory() {
         <DialogTitle>Enter Movie Information</DialogTitle>
         <Box sx={{ px: 2, pb: 2 }}>
           {Object.keys(formTemplate).map((_entry, _index) => {
-            console.log(_entry);
-            return _entry !== "id" && <Box key={`${_entry}_${_index}`} sx={{ p: 1 }}>
-              <TextField
-                id="outlined-controlled"
-                fullWidth
-                label={_entry}
-                name={_entry}
-                value={newMovie ? newMovie[_entry] : ""}
-                onChange={handleChange}
-              />
-            </Box>
+            return _entry !== "id" &&
+              <Box key={`${_entry}_${_index}`} sx={{ p: 1 }}>
+                {_entry !== "genres" && <TextField
+                  id="outlined-controlled"
+                  fullWidth
+                  label={_entry}
+                  name={_entry}
+                  value={newMovie ? newMovie[_entry] : ""}
+                  onChange={handleChange}
+                />}
+                {_entry === "genres" && <FormGroup>
+                  <FormLabel component="legend">Genres</FormLabel>
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChange} color="primary" name="action" />}
+                    label="Action"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChange} color="primary" name="horror" />}
+                    label="Horror"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChange} color="primary" name="comedy" />}
+                    label="Comedy"
+                  />
+                </FormGroup>}
+              </Box>
           })}
           <Box sx={{ p: 1 }}>
             <Button fullWidth disabled={!areAllPropertiesFilled(newMovie)} variant='contained' onClick={addMovieEntry}>Submit</Button>

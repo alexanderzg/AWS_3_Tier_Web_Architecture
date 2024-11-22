@@ -1,9 +1,11 @@
+import { MovieEntry } from "./movieEntry"
+
 export interface PlotSeries {
     name: string,
-    data: any[]
+    data: PlotData[]
 }
 
-interface data {
-    x: any,
-    y: any
+export interface PlotData {
+    x: Date,//Date
+    y: number //
 }
