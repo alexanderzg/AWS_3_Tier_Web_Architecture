@@ -22,12 +22,15 @@ import {
   MenuItem,
   Typography,
   useTheme,
-  CardHeader
+  CardHeader,
+  Button
 } from '@mui/material';
 
+import { NavLink as RouterLink } from 'react-router-dom';
 import Label from 'src/components/Label';
 import { MovieEntry } from 'src/models/movieEntry';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
 
@@ -266,7 +269,14 @@ const MovieInventoryTable = ({
                       gutterBottom
                       noWrap
                     >
-                      {movie.name}
+                      <Button
+                        disableRipple
+                        component={RouterLink}
+                        to="/management/profile/details"
+                        startIcon={<AccountCircleTwoToneIcon />}
+                      >
+                        {movie.name}
+                      </Button>
                     </Typography>
                     {/* <Typography variant="body2" color="text.secondary" noWrap>
                       {format(movie.orderDate, 'MMMM dd yyyy')}
