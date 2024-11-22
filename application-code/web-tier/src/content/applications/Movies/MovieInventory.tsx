@@ -89,10 +89,10 @@ function MovieInventory() {
   }, []);
 
   const getMovieData = () => {
-    httpRequest(OptionsHttpMethods.GET, '/api/transaction')
+    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/api/transaction`)
     .then((_response) => {
       console.log(_response);
-      setMovies(_response.result);
+      setMovies(_response);
     }).catch((error) => {
       console.log(error);
       setMovies(MOVIES);
@@ -103,7 +103,7 @@ function MovieInventory() {
     console.log(newMovie);
     setMovies((prev) => [{...newMovie, id: String(movies.length + 1)}, ...prev]);
     handleClose();
-    // httpRequest(OptionsHttpMethods.POST, '/api/transaction', newMovie)
+    // httpRequest(OptionsHttpMethods.POST, `${process.env.REACT_APP_API}/api/transaction`, newMovie)
     // .then((_response) => {
     //   console.log(_response);
     //   getMovieData();
@@ -114,7 +114,7 @@ function MovieInventory() {
 
   const deleteMovieEntry = (movie: MovieEntry) => {
     setMovies((prev) => [...prev.filter((_entry) => _entry.id !== movie.id )]);
-    // httpRequest(OptionsHttpMethods.DELETE, `/api/transaction/${movie.id}`)
+    // httpRequest(OptionsHttpMethods.DELETE, `${process.env.REACT_APP_API}/api/transaction/${movie.id}`)
     // .then((_response) => {
     //   console.log(_response);
     //   getMovieData();
@@ -189,7 +189,7 @@ function MovieInventory() {
         >
           <Grid item xs={12}>
             <Card>
-              <MovieInventoryTable movieEntry={movies} deleteMovieEntry={deleteMovieEntry}/>
+              {movies.length > 0 && <MovieInventoryTable movieEntry={movies} deleteMovieEntry={deleteMovieEntry}/>}
             </Card>
           </Grid>
         </Grid>

@@ -51,7 +51,6 @@ const getStatusLabel = (cryptoOrderStatus: string[]): JSX.Element => {
     }
   };
 
-
   try {
     const labels = cryptoOrderStatus.map((_genre, _index) => {
       const { text, color }: any = map[_genre];
@@ -86,6 +85,25 @@ const applyPagination = (
   return movieEntry.slice(page * limit, page * limit + limit);
 };
 
+const statusOptions = [
+  {
+    id: 'all',
+    name: 'All'
+  },
+  {
+    id: 'horror',
+    name: 'Horror'
+  },
+  {
+    id: 'comedy',
+    name: 'Comedy'
+  },
+  {
+    id: 'action',
+    name: 'Action'
+  }
+];
+
 interface Props {
   movieEntry: MovieEntry[],
   deleteMovieEntry: (movie: MovieEntry) => void;
@@ -94,7 +112,7 @@ interface Props {
 const MovieInventoryTable = ({
   movieEntry,
   deleteMovieEntry
-}:Props) => {
+}: Props) => {
   const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>(
     []
   );
@@ -104,25 +122,6 @@ const MovieInventoryTable = ({
   const [filters, setFilters] = useState<Filters>({
     genre: null
   });
-
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'horror',
-      name: 'Horror'
-    },
-    {
-      id: 'comedy',
-      name: 'Comedy'
-    },
-    {
-      id: 'action',
-      name: 'Action'
-    }
-  ];
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
     let value = null;
@@ -172,16 +171,9 @@ const MovieInventoryTable = ({
   };
 
   const filteredCryptoOrders = applyFilters(movieEntry, filters);
-  const paginateMovies = applyPagination(
-    filteredCryptoOrders,
-    page,
-    limit
-  );
-  const selectedSomeCryptoOrders =
-    selectedCryptoOrders.length > 0 &&
-    selectedCryptoOrders.length < movieEntry.length;
-  const selectedAllCryptoOrders =
-    selectedCryptoOrders.length === movieEntry.length;
+  const paginateMovies = applyPagination(filteredCryptoOrders, page, limit);
+  const selectedSomeCryptoOrders = selectedCryptoOrders.length > 0 && selectedCryptoOrders.length < movieEntry.length;
+  const selectedAllCryptoOrders = selectedCryptoOrders.length === movieEntry.length;
   const theme = useTheme();
 
   return (

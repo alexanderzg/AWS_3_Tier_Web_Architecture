@@ -71,7 +71,7 @@ const useApiService = (): OutputProps => {
     
     const getHeaders = (requestOptions = {}): RequestInit => {
         const newRequestHeaders: RequestInit = requestOptions;
-        newRequestHeaders.credentials = 'include';
+        // newRequestHeaders.credentials = 'include'; //Do not require CORS
         newRequestHeaders.headers = {
             // Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
