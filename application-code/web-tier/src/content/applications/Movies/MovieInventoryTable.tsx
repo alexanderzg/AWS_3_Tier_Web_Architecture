@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, useState } from 'react';
+import { FC, ChangeEvent, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import numeral from 'numeral';
 import PropTypes from 'prop-types';
@@ -30,12 +30,14 @@ import { MovieEntry } from 'src/models/movieEntry';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
+import useApiService from 'src/hooks/useApiService';
+import { OptionsHttpMethods } from 'src/models/optionsValues';
 
 interface Filters {
   genre?: any;
 }
 
-const getStatusLabel = (cryptoOrderStatus: string[]): JSX.Element => {
+const getStatusLabel = (genres: string[]): JSX.Element => {
   const map = {
     horror: {
       text: 'Horror',
@@ -48,25 +50,35 @@ const getStatusLabel = (cryptoOrderStatus: string[]): JSX.Element => {
     action: {
       text: 'Action',
       color: 'warning'
+    },
+    drama: {
+      text: 'Drama',
+      color: 'primary'
+    },
+    animation: {
+      text: 'Animation',
+      color: 'info'
     }
   };
 
-  try {
-    const labels = cryptoOrderStatus.map((_genre, _index) => {
-      const { text, color }: any = map[_genre];
-      return <span key={`${_genre}_${_index}`}><Label color={color}>{text}</Label>&nbsp;</span>;
+    const labels = [];
+    genres.map((_genre, _index) => {
+      try {
+        const { text, color }: any = map[_genre];
+        labels.push(<span key={`${_genre}_${_index}`}><Label color={color}>{text.toUpperCase()}</Label>&nbsp;</span>);
+      } catch (e) {
+        labels.push(<span key={`${_genre}_${_index}`}><Label color={"secondary"}>{_genre.toUpperCase()}</Label>&nbsp;</span>);
+      }
+  
     });
     return <>{labels}</>;
-  } catch (e) {
-    return <Label color="info">Other</Label>;
-  }
 };
 
 const applyFilters = (
-  movieEntry: MovieEntry[],
+  movieInventory: MovieEntry[],
   filters: Filters
 ): MovieEntry[] => {
-  return movieEntry.filter((movie) => {
+  return movieInventory.filter((movie) => {
     let matches = true;
     const hasOneOrMore = movie.genres.find((_entry) => _entry === filters.genre);
     if (filters.genre && !Boolean(hasOneOrMore)) {
@@ -78,14 +90,14 @@ const applyFilters = (
 };
 
 const applyPagination = (
-  movieEntry: MovieEntry[],
+  movieInventory: MovieEntry[],
   page: number,
   limit: number
 ): MovieEntry[] => {
-  return movieEntry.slice(page * limit, page * limit + limit);
+  return movieInventory.slice(page * limit, page * limit + limit);
 };
 
-const statusOptions = [
+const GENRE_OPTIONS = [
   {
     id: 'all',
     name: 'All'
@@ -105,23 +117,40 @@ const statusOptions = [
 ];
 
 interface Props {
-  movieEntry: MovieEntry[],
+  movieInventory: MovieEntry[],
   deleteMovieEntry: (movie: MovieEntry) => void;
 }
 
 const MovieInventoryTable = ({
-  movieEntry,
+  movieInventory,
   deleteMovieEntry
 }: Props) => {
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>(
-    []
-  );
+  const { httpRequest } = useApiService();
+  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>([]);
   const selectedBulkActions = selectedCryptoOrders.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-    genre: null
-  });
+  const [filters, setFilters] = useState<Filters>({ genre: null });
+  const [genreOptions, setGenreOptions] = useState([{ id: 'all', name: 'All' }]);
+
+  useEffect(() => {
+    getCategoryFilters();
+  }, []);
+
+  const getCategoryFilters = () => {
+    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/api/genres`)
+    .then((_response) => {
+      console.log(_response);
+      const _gOptions = [...genreOptions];
+      _response.map((_r) => {
+        _gOptions.push({ id: _r.toLowerCase(), name: _r });
+      });
+      setGenreOptions(_gOptions);
+    }).catch((error) => {
+      console.log(error);
+      setGenreOptions(GENRE_OPTIONS);
+    })
+  }
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
     let value = null;
@@ -141,7 +170,7 @@ const MovieInventoryTable = ({
   ): void => {
     setSelectedCryptoOrders(
       event.target.checked
-        ? movieEntry.map((movie) => movie.id)
+        ? movieInventory.map((movie) => movie.id)
         : []
     );
   };
@@ -170,10 +199,10 @@ const MovieInventoryTable = ({
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredCryptoOrders = applyFilters(movieEntry, filters);
+  const filteredCryptoOrders = applyFilters(movieInventory, filters);
   const paginateMovies = applyPagination(filteredCryptoOrders, page, limit);
-  const selectedSomeCryptoOrders = selectedCryptoOrders.length > 0 && selectedCryptoOrders.length < movieEntry.length;
-  const selectedAllCryptoOrders = selectedCryptoOrders.length === movieEntry.length;
+  const selectedSomeCryptoOrders = selectedCryptoOrders.length > 0 && selectedCryptoOrders.length < movieInventory.length;
+  const selectedAllCryptoOrders = selectedCryptoOrders.length === movieInventory.length;
   const theme = useTheme();
 
   return (
@@ -188,14 +217,14 @@ const MovieInventoryTable = ({
           action={
             <Box width={150}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel>Genre</InputLabel>
+                <InputLabel>Genres</InputLabel>
                 <Select
                   value={filters.genre || 'all'}
                   onChange={handleStatusChange}
                   label="Genre"
                   autoWidth
                 >
-                  {statusOptions.map((statusOption) => (
+                  {genreOptions.map((statusOption) => (
                     <MenuItem key={statusOption.id} value={statusOption.id}>
                       {statusOption.name}
                     </MenuItem>

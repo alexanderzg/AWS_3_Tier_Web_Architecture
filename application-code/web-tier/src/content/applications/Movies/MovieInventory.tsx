@@ -1,4 +1,4 @@
-import { Box, Button, Card, Checkbox, Container, Dialog, DialogTitle, FormControlLabel, FormGroup, FormLabel, Grid, List, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, Checkbox, Container, Dialog, DialogTitle, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, List, TextField, Typography } from '@mui/material';
 import { MovieEntry } from 'src/models/movieEntry';
 import { subDays } from 'date-fns';
 import useApiService from 'src/hooks/useApiService';
@@ -25,7 +25,7 @@ const MOVIES: MovieEntry[] = [
     name: 'Fiat Deposit',
     description: 'completed',
     rating: 5,
-    genres: ['horror'],
+    genres: ['music', 'horror'],
     year: 2000,
     tagLine: "Awesome",
     minutes: 100
@@ -89,7 +89,7 @@ function MovieInventory() {
   }, []);
 
   const getMovieData = () => {
-    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/api/transaction`)
+    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/api/inventory`)
     .then((_response) => {
       console.log(_response);
       setMovies(_response);
@@ -103,7 +103,7 @@ function MovieInventory() {
     console.log(newMovie);
     setMovies((prev) => [{...newMovie, id: String(movies.length + 1)}, ...prev]);
     handleClose();
-    // httpRequest(OptionsHttpMethods.POST, `${process.env.REACT_APP_API}/api/transaction`, newMovie)
+    // httpRequest(OptionsHttpMethods.POST, `${process.env.REACT_APP_API}/api/inventory`, newMovie)
     // .then((_response) => {
     //   console.log(_response);
     //   getMovieData();
@@ -114,7 +114,7 @@ function MovieInventory() {
 
   const deleteMovieEntry = (movie: MovieEntry) => {
     setMovies((prev) => [...prev.filter((_entry) => _entry.id !== movie.id )]);
-    // httpRequest(OptionsHttpMethods.DELETE, `${process.env.REACT_APP_API}/api/transaction/${movie.id}`)
+    // httpRequest(OptionsHttpMethods.DELETE, `${process.env.REACT_APP_API}/api/inventory/${movie.id}`)
     // .then((_response) => {
     //   console.log(_response);
     //   getMovieData();
@@ -189,7 +189,7 @@ function MovieInventory() {
         >
           <Grid item xs={12}>
             <Card>
-              {movies.length > 0 && <MovieInventoryTable movieEntry={movies} deleteMovieEntry={deleteMovieEntry}/>}
+              {movies.length > 0 && <MovieInventoryTable movieInventory={movies} deleteMovieEntry={deleteMovieEntry}/>}
             </Card>
           </Grid>
         </Grid>
@@ -208,21 +208,28 @@ function MovieInventory() {
                   value={newMovie ? newMovie[_entry] : ""}
                   onChange={handleChange}
                 />}
-                {_entry === "genres" && <FormGroup>
+                {_entry === "genres" && 
+                <FormControl>
                   <FormLabel component="legend">Genres</FormLabel>
-                  <FormControlLabel
-                    control={<Checkbox onChange={handleChange} color="primary" name="action" />}
-                    label="Action"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox onChange={handleChange} color="primary" name="horror" />}
-                    label="Horror"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox onChange={handleChange} color="primary" name="comedy" />}
-                    label="Comedy"
-                  />
-                </FormGroup>}
+                  <FormGroup row>
+                    <FormControlLabel
+                      control={<Checkbox onChange={handleChange} color="primary" name="action" />}
+                      label="Action"
+                    />
+                    <FormControlLabel
+                      control={<Checkbox onChange={handleChange} color="primary" name="horror" />}
+                      label="Horror"
+                    />
+                    <FormControlLabel
+                      control={<Checkbox onChange={handleChange} color="primary" name="comedy" />}
+                      label="Comedy"
+                    />
+                    <FormControlLabel
+                      control={<Checkbox onChange={handleChange} color="primary" name="drama" />}
+                      label="Drama"
+                    />
+                  </FormGroup>
+                </FormControl>}
               </Box>
           })}
           <Box sx={{ p: 1 }}>
