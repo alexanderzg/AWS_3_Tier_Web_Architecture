@@ -184,41 +184,6 @@ function SidebarMenu() {
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Dashboards
-            </ListSubheader>
-          }
-        >
-          <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/analytics"
-                  startIcon={<BrightnessLowTwoToneIcon />}
-                >
-                  Movie Analytics
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards/messenger"
-                  startIcon={<MmsTwoToneIcon />}
-                >
-                  Messenger
-                </Button>
-              </ListItem>
-            </List>
-          </SubMenuWrapper>
-        </List>
-        <List
-          component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
               Management
             </ListSubheader>
           }

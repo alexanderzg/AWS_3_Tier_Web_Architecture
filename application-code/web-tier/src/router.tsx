@@ -13,19 +13,8 @@ const Loader = (Component) => (props) =>
     </Suspense>
   );
 
-// Pages
-
-const Overview = Loader(lazy(() => import('src/content/overview')));
-
-// Dashboards
-
-const Tasks = Loader(lazy(() => import('src/content/dashboards/Analytics/AnalyticsPlots')));
-
 // Applications
 
-const Messenger = Loader(
-  lazy(() => import('src/content/applications/Messenger'))
-);
 const Transactions = Loader(
   lazy(() => import('src/content/applications/Movies/Movies'))
 );
@@ -78,25 +67,7 @@ const StatusMaintenance = Loader(
 const routes: RouteObject[] = [
   {
     path: '*',
-    element: <Navigate to="/dashboards" replace />
-  },
-  {
-    path: 'dashboards',
-    element: <SidebarLayout />,
-    children: [
-      {
-        path: '',
-        element: <Navigate to="analytics" replace />
-      },
-      {
-        path: 'analytics',
-        element: <Tasks />
-      },
-      {
-        path: 'messenger',
-        element: <Messenger />
-      }
-    ]
+    element: <Navigate to="/management" replace />
   },
   {
     path: 'management',
