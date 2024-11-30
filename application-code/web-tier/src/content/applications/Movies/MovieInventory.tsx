@@ -12,17 +12,21 @@ import MovieInventoryTable from './MovieInventoryTable';
 const MOVIES: MovieEntry[] = [
   {
     id: '1',
-    name: 'Fiat Deposit',
+    name: 'Movie One',
+    posterImg: '',
+    coverImg: '',
     description: 'completed',
     rating: 5,
     genres: ['horror', 'action'],
     year: 2222,
     tagLine: "Awesome",
-    minutes: 100
+    minutes: 100,
   },
   {
     id: '2',
-    name: 'Fiat Deposit',
+    name: 'Movie One: Two',
+    posterImg: '',
+    coverImg: '',
     description: 'completed',
     rating: 5,
     genres: ['music', 'horror'],
@@ -32,7 +36,9 @@ const MOVIES: MovieEntry[] = [
   },
   {
     id: '3',
-    name: 'Fiat Deposit',
+    name: 'Movie Three',
+    posterImg: '',
+    coverImg: '',
     description: 'completed',
     rating: 5,
     genres: ['horror'],
@@ -42,7 +48,9 @@ const MOVIES: MovieEntry[] = [
   },
   {
     id: '4',
-    name: 'Fiat Deposit',
+    name: 'Movie Four',
+    posterImg: '',
+    coverImg: '',
     description: 'completed',
     rating: 5,
     genres: ['horror'],
@@ -52,7 +60,9 @@ const MOVIES: MovieEntry[] = [
   },
   {
     id: '5',
-    name: 'Fiat Deposit',
+    name: 'Movie Five',
+    posterImg: '',
+    coverImg: '',
     description: 'completed',
     rating: 5,
     genres: ['horror'],
@@ -62,7 +72,9 @@ const MOVIES: MovieEntry[] = [
   },
   {
     id: '6',
-    name: 'Fiat Deposit',
+    name: 'Movie Six',
+    posterImg: '',
+    coverImg: '',
     description: 'completed',
     rating: 5,
     genres: ['horror'],
@@ -135,11 +147,11 @@ function MovieInventory() {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.type === "checkbox") {
       if (newMovie.genres.some(_g => _g === event.target.name)) {
-        setNewMovie((prev) => 
+        setNewMovie((prev) =>
           ({...prev, genres: prev.genres.filter((_entry) => _entry !== event.target.name)})
-        ) 
+        )
       } else {
-        setNewMovie((prev) => 
+        setNewMovie((prev) =>
           ({...prev, genres: prev.genres.concat(event.target.name)})
         )
       }

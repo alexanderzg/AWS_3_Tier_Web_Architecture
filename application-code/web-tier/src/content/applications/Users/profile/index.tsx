@@ -1,7 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 import Footer from 'src/components/Footer';
 
-import { Grid, Container } from '@mui/material';
+import {
+  Grid,
+  Container,
+  Box,
+  Tooltip,
+  IconButton,
+} from '@mui/material';
+
+import ArrowBackTwoToneIcon from '@mui/icons-material/ArrowBackTwoTone';
 
 import ProfileCover from './ProfileCover';
 import RecentActivity from './RecentActivity';
@@ -11,16 +19,17 @@ import MyCards from './MyCards';
 import Addresses from './Addresses';
 
 function ManagementUserProfile() {
-  const user = {
-    savedCards: 7,
-    name: 'Catherine Pike',
-    coverImg: '/static/images/placeholders/covers/5.jpg',
-    avatar: '/static/images/avatars/4.jpg',
-    description:
-      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage",
-    jobtitle: 'Web Developer',
-    location: 'Barcelona, Spain',
-    followers: '465'
+  const movie = {
+    id: '1',
+    name: 'Whiplash',
+    posterImg: 'https://image.tmdb.org/t/p/original/E1fpfU9cMCgFYL3QPvJr3vt20X.jpg',
+    coverImg: 'https://image.tmdb.org/t/p/original/vNXGrknx4GjWLgmuNTftWZluIUl.jpg',
+    description: 'Under the direction of a ruthless instructor, a talented young drummer begins to pursue perfection at any cost, even his humanity.',
+    rating: 5,
+    genres: ['Drama', 'Music'],
+    year: 2014,
+    tagLine: "The Road to Greatness Can Take You To the Edge",
+    minutes: 107
   };
 
   return (
@@ -28,7 +37,14 @@ function ManagementUserProfile() {
       <Helmet>
         <title>User Details - Management</title>
       </Helmet>
-      <Container sx={{ mt: 3 }} maxWidth="lg">
+      <Container sx={{ mt: 1 }} maxWidth="lg">
+        <Box>
+          <Tooltip arrow placement="top" title="Go back">
+            <IconButton color="primary" sx={{ mr: 2, mb: 1 }}>
+              <ArrowBackTwoToneIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
         <Grid
           container
           direction="row"
@@ -37,23 +53,23 @@ function ManagementUserProfile() {
           spacing={3}
         >
           <Grid item xs={12} md={8}>
-            <ProfileCover user={user} />
+            <ProfileCover movie={movie} />
           </Grid>
-          <Grid item xs={12} md={4}>
+          {/* <Grid item xs={12} md={4}>
             <RecentActivity />
-          </Grid>
-          <Grid item xs={12} md={8}>
+          </Grid> */}
+          {/* <Grid item xs={12} md={8}>
             <Feed />
-          </Grid>
-          <Grid item xs={12} md={4}>
+          </Grid> */}
+          {/* <Grid item xs={12} md={4}>
             <PopularTags />
-          </Grid>
-          <Grid item xs={12} md={7}>
+          </Grid> */}
+          {/* <Grid item xs={12} md={7}>
             <MyCards />
-          </Grid>
-          <Grid item xs={12} md={5}>
+          </Grid> */}
+          {/* <Grid item xs={12} md={5}>
             <Addresses />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
       <Footer />
