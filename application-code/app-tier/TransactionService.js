@@ -9,7 +9,7 @@ const con = mysql.createConnection({
 });
 
 function addTransaction(amount,desc){
-    var mysql = `INSERT INTO \`transactions\` (\`amount\`, \`description\`) VALUES ('${amount}','${desc}')`;
+    var mysql = `INSERT INTO \`movies\` (\`amount\`, \`description\`) VALUES ('${amount}','${desc}')`;
     con.query(mysql, function(err,result){
         if (err) throw err;
         console.log("Adding to the table should have worked");
@@ -18,37 +18,37 @@ function addTransaction(amount,desc){
 }
 
 function getAllTransactions(callback){
-    var mysql = "SELECT * FROM transactions";
+    var mysql = "SELECT * FROM movies";
     con.query(mysql, function(err,result){
         if (err) throw err;
-        console.log("Getting all transactions...");
+        console.log("Getting all movies...");
         return(callback(result));
     });
 }
 
 function findTransactionById(id,callback){
-    var mysql = `SELECT * FROM transactions WHERE id = ${id}`;
+    var mysql = `SELECT * FROM movies WHERE id = ${id}`;
     con.query(mysql, function(err,result){
         if (err) throw err;
-        console.log(`retrieving transactions with id ${id}`);
+        console.log(`retrieving movies with id ${id}`);
         return(callback(result));
     }) 
 }
 
 function deleteAllTransactions(callback){
-    var mysql = "DELETE FROM transactions";
+    var mysql = "DELETE FROM movies";
     con.query(mysql, function(err,result){
         if (err) throw err;
-        console.log("Deleting all transactions...");
+        console.log("Deleting all movies...");
         return(callback(result));
     }) 
 }
 
 function deleteTransactionById(id, callback){
-    var mysql = `DELETE FROM transactions WHERE id = ${id}`;
+    var mysql = `DELETE FROM movies WHERE id = ${id}`;
     con.query(mysql, function(err,result){
         if (err) throw err;
-        console.log(`Deleting transactions with id ${id}`);
+        console.log(`Deleting movies with id ${id}`);
         return(callback(result));
     }) 
 }
