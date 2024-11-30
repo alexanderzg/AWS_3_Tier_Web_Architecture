@@ -8,12 +8,33 @@ const con = mysql.createConnection({
     database: dbcreds.DB_DATABASE
 });
 
-function addTransaction(amount,desc){
-    var mysql = `INSERT INTO \`movies\` (\`amount\`, \`description\`) VALUES ('${amount}','${desc}')`;
+function addTransaction(req){
+    var mysql = `INSERT INTO \`movies\` (
+        \`name\`,
+        \`posterImg\`,
+        \`coverImg\`,
+        \`description\`,
+        \`rating\`,
+        \`year\`,
+        \`tagLine\`,
+        \`minutes\`,
+        \`genres\`
+    )
+    VALUES (
+    '${req.name}',
+    '${req.posterImg}',
+    '${req.coverImg}',
+    '${req.description}',
+    '${req.rating}',
+    '${req.year}',
+    '${req.tagLine}',
+    '${req.minutes}',
+    '${req.genres}'
+    )`;
     con.query(mysql, function(err,result){
         if (err) throw err;
         console.log("Adding to the table should have worked");
-    }) 
+    })
     return 200;
 }
 
@@ -32,7 +53,7 @@ function findTransactionById(id,callback){
         if (err) throw err;
         console.log(`retrieving movies with id ${id}`);
         return(callback(result));
-    }) 
+    })
 }
 
 function deleteAllTransactions(callback){
@@ -41,7 +62,7 @@ function deleteAllTransactions(callback){
         if (err) throw err;
         console.log("Deleting all movies...");
         return(callback(result));
-    }) 
+    })
 }
 
 function deleteTransactionById(id, callback){
@@ -50,7 +71,7 @@ function deleteTransactionById(id, callback){
         if (err) throw err;
         console.log(`Deleting movies with id ${id}`);
         return(callback(result));
-    }) 
+    })
 }
 
 
