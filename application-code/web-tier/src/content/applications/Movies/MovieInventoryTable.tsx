@@ -129,7 +129,7 @@ const MovieInventoryTable = ({
   deleteMovieEntry
 }: Props) => {
   const { httpRequest } = useApiService();
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>([]);
+  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<number[]>([]);
   const selectedBulkActions = selectedCryptoOrders.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
@@ -180,7 +180,7 @@ const MovieInventoryTable = ({
 
   const handleSelectOneCryptoOrder = (
     event: ChangeEvent<HTMLInputElement>,
-    cryptoOrderId: string
+    cryptoOrderId: number
   ): void => {
     if (!selectedCryptoOrders.includes(cryptoOrderId)) {
       setSelectedCryptoOrders((prevSelected) => [

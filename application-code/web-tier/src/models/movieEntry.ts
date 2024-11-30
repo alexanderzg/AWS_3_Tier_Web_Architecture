@@ -1,5 +1,5 @@
 export class MovieEntry {
-  id: string = "-1";
+  id: number = -1;
   name: string = "";
   posterImg: string = "";
   coverImg: string = "";

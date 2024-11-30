@@ -11,7 +11,7 @@ import MovieInventoryTable from './MovieInventoryTable';
 
 const MOVIES: MovieEntry[] = [
   {
-    id: '1',
+    id: 1,
     name: 'Movie One',
     posterImg: '',
     coverImg: '',
@@ -23,7 +23,7 @@ const MOVIES: MovieEntry[] = [
     minutes: 100,
   },
   {
-    id: '2',
+    id: 2,
     name: 'Movie One: Two',
     posterImg: '',
     coverImg: '',
@@ -35,7 +35,7 @@ const MOVIES: MovieEntry[] = [
     minutes: 100
   },
   {
-    id: '3',
+    id: 3,
     name: 'Movie Three',
     posterImg: '',
     coverImg: '',
@@ -47,7 +47,7 @@ const MOVIES: MovieEntry[] = [
     minutes: 100
   },
   {
-    id: '4',
+    id: 4,
     name: 'Movie Four',
     posterImg: '',
     coverImg: '',
@@ -59,7 +59,7 @@ const MOVIES: MovieEntry[] = [
     minutes: 100
   },
   {
-    id: '5',
+    id: 5,
     name: 'Movie Five',
     posterImg: '',
     coverImg: '',
@@ -71,7 +71,7 @@ const MOVIES: MovieEntry[] = [
     minutes: 100
   },
   {
-    id: '6',
+    id: 6,
     name: 'Movie Six',
     posterImg: '',
     coverImg: '',
@@ -114,7 +114,7 @@ function MovieInventory() {
   const addMovieEntry = () => {
     console.log(newMovie);
     console.log(process.env.REACT_APP_API);
-    setMovies((prev) => [{...newMovie, id: String(movies.length + 1)}, ...prev]);
+    setMovies((prev) => [{...newMovie, id: movies.length + 1}, ...prev]);
     handleClose();
     httpRequest(OptionsHttpMethods.POST, `${process.env.REACT_APP_API}/inventory`, newMovie)
     .then((_response) => {
