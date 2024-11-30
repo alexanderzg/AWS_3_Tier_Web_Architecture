@@ -101,7 +101,7 @@ function MovieInventory() {
   }, []);
 
   const getMovieData = () => {
-    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/api/inventory`)
+    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/inventory`)
     .then((_response) => {
       console.log(_response);
       setMovies(_response);
@@ -113,26 +113,27 @@ function MovieInventory() {
 
   const addMovieEntry = () => {
     console.log(newMovie);
+    console.log(process.env.REACT_APP_API);
     setMovies((prev) => [{...newMovie, id: String(movies.length + 1)}, ...prev]);
     handleClose();
-    // httpRequest(OptionsHttpMethods.POST, `${process.env.REACT_APP_API}/api/inventory`, newMovie)
-    // .then((_response) => {
-    //   console.log(_response);
-    //   getMovieData();
-    // }).catch((error) => {
-    //   console.log(error);
-    // })
+    httpRequest(OptionsHttpMethods.POST, `${process.env.REACT_APP_API}/inventory`, newMovie)
+    .then((_response) => {
+      console.log(_response);
+      getMovieData();
+    }).catch((error) => {
+      console.log(error);
+    })
   }
 
   const deleteMovieEntry = (movie: MovieEntry) => {
     setMovies((prev) => [...prev.filter((_entry) => _entry.id !== movie.id )]);
-    // httpRequest(OptionsHttpMethods.DELETE, `${process.env.REACT_APP_API}/api/inventory/${movie.id}`)
-    // .then((_response) => {
-    //   console.log(_response);
-    //   getMovieData();
-    // }).catch((error) => {
-    //   console.log(error);
-    // })
+    httpRequest(OptionsHttpMethods.DELETE, `${process.env.REACT_APP_API}/inventory/${movie.id}`)
+    .then((_response) => {
+      console.log(_response);
+      getMovieData();
+    }).catch((error) => {
+      console.log(error);
+    })
   }
 
   const handleClose = () => {
@@ -220,7 +221,7 @@ function MovieInventory() {
                   value={newMovie ? newMovie[_entry] : ""}
                   onChange={handleChange}
                 />}
-                {_entry === "genres" && 
+                {_entry === "genres" &&
                 <FormControl>
                   <FormLabel component="legend">Genres</FormLabel>
                   <FormGroup row>

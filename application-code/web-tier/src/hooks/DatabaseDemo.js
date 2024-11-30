@@ -3,13 +3,13 @@
     import './DatabaseDemo.css';
 
     class DatabaseDemo extends Component {
-     
+
         constructor(props) {
             super(props) //since we are extending class Table so we have to use super in order to override Component class constructor
             this.handleTextChange = this.handleTextChange.bind(this);
             this.handleButtonClick = this.handleButtonClick.bind(this);
             this.handleButtonClickDel = this.handleButtonClickDel.bind(this);
-            this.state = { 
+            this.state = {
                transactions: [],
                text_amt: "",
                text_desc:""
@@ -21,7 +21,7 @@
           }
 
         populateData(){
-            this.fetch_retry('/api/inventory',3)
+            this.fetch_retry('/inventory',3)
             .then(res => res.json())
             .then((data) => {
               this.setState({ transactions : data.result });
@@ -29,14 +29,14 @@
               console.log(this.state.transactions);
             })
             .catch(console.log);
-        }  
+        }
 
         async fetch_retry(url, n){
             try {
                 return await fetch(url)
             } catch(err) {
                 if (n === 1) throw err;
-                await new Promise(resolve => setTimeout(resolve, 1000)); 
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 return await this.fetch_retry(url, n - 1);
             }
         };
@@ -59,7 +59,7 @@
            const requestOptions = {
                method: 'DELETE'
            }
-           fetch('/api/inventory', requestOptions)
+           fetch('/inventory', requestOptions)
            .then(response => response.json())
            .then(data => this.populateData())
 
@@ -75,11 +75,11 @@
                 headers: {'Content-Type':'application/json'},
                 body: JSON.stringify({"amount":this.state.text_amt, "desc" :this.state.text_desc})
             }
-            
-            fetch('/api/inventory', requestOptions)
+
+            fetch('/inventory', requestOptions)
             .then(response => response.json())
             .then(data => this.populateData())
-            
+
             this.setState({text_amt : "", text_desc:""});
 
          }

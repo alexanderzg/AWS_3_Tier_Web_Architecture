@@ -72,7 +72,7 @@ const getStatusLabel = (genres: string[]): JSX.Element => {
       } catch (e) {
         labels.push(<span key={`${_genre}_${_index}`}><Label color={"secondary"}>{_genre.toUpperCase()}</Label>&nbsp;</span>);
       }
-  
+
     });
     return <>{labels}</>;
 };
@@ -141,7 +141,7 @@ const MovieInventoryTable = ({
   }, []);
 
   const getCategoryFilters = () => {
-    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/api/genres`)
+    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/genres`)
     .then((_response) => {
       console.log(_response);
       const _gOptions = [...genreOptions];

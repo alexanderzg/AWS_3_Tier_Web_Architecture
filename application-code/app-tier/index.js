@@ -25,8 +25,6 @@ app.post('/inventory', (req,res)=>{
     var response = "";
     try{
         console.log(req.body);
-        console.log(req.body.amount);
-        console.log(req.body.desc);
         var success = transactionService.addTransaction(req.body.amount,req.body.desc);
         if (success = 200) res.json({ message: 'added transaction successfully'});
     }catch (err){
