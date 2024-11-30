@@ -54,7 +54,7 @@ app.get('/inventory',(req,res)=>{
             }
             console.log(transactionList);
             res.statusCode = 200;
-            res.json({"result":transactionList});
+            res.json(transactionList);
         });
     }catch (err){
         res.json({message:"could not get all transactions",error: err.message});
