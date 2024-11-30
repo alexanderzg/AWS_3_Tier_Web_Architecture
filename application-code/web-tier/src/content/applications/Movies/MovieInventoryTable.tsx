@@ -116,6 +116,14 @@ const GENRE_OPTIONS = [
   {
     id: 'action',
     name: 'Action'
+  },
+  {
+    id: 'drama',
+    name: 'Drama'
+  },
+  {
+    id: 'animation',
+    name: 'Animation'
   }
 ];
 
@@ -141,18 +149,7 @@ const MovieInventoryTable = ({
   }, []);
 
   const getCategoryFilters = () => {
-    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/genres`)
-    .then((_response) => {
-      console.log(_response);
-      const _gOptions = [...genreOptions];
-      _response.map((_r) => {
-        _gOptions.push({ id: _r.toLowerCase(), name: _r });
-      });
-      setGenreOptions(_gOptions);
-    }).catch((error) => {
-      console.log(error);
       setGenreOptions(GENRE_OPTIONS);
-    })
   }
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -294,7 +291,6 @@ const MovieInventoryTable = ({
                         disableRipple
                         component={RouterLink}
                         to="/management/profile/details"
-                        startIcon={<AccountCircleTwoToneIcon />}
                       >
                         {movie.name}
                       </Button>
