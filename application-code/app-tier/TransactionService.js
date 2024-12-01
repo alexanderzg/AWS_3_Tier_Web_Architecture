@@ -47,18 +47,7 @@ function getAllTransactions(callback){
             return(callback(result));
         } catch (e) {
             return(callback(
-                [{
-                    "id": 2,
-                    "name": "Avatar",
-                    "posterImg": "",
-                    "coverImg": "",
-                    "description": "This is a fallback response",
-                    "rating": 3,
-                    "year": 2002,
-                    "tagLine": "no tags",
-                    "minutes": 220,
-                    "genres": ["action", "animation"]
-                }]
+                []
             ));
         }
     });

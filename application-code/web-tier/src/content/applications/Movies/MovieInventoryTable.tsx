@@ -67,7 +67,7 @@ const getStatusLabel = (genres: string[]): JSX.Element => {
     const labels = [];
     genres.map((_genre, _index) => {
       try {
-        const { text, color }: any = map[_genre];
+        const { text, color }: any = map[_genre.toLowerCase()];
         labels.push(<span key={`${_genre}_${_index}`}><Label color={color}>{text.toUpperCase()}</Label>&nbsp;</span>);
       } catch (e) {
         labels.push(<span key={`${_genre}_${_index}`}><Label color={"secondary"}>{_genre.toUpperCase()}</Label>&nbsp;</span>);
@@ -294,7 +294,7 @@ const MovieInventoryTable = ({
                       {format(movie.orderDate, 'MMMM dd yyyy')}
                     </Typography> */}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ maxWidth: "200px" }}>
                     <Typography
                       variant="body1"
                       fontWeight="bold"
