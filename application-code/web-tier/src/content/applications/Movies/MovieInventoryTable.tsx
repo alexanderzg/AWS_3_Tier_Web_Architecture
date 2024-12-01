@@ -207,11 +207,6 @@ const MovieInventoryTable = ({
 
   return (
     <Card>
-      {selectedBulkActions && (
-        <Box flex={1} p={2}>
-          <BulkActions />
-        </Box>
-      )}
       {!selectedBulkActions && (
         <CardHeader
           action={
@@ -233,7 +228,7 @@ const MovieInventoryTable = ({
               </FormControl>
             </Box>
           }
-          title="Recent Orders"
+          title="Movies"
         />
       )}
       <Divider />
@@ -241,14 +236,14 @@ const MovieInventoryTable = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
                   checked={selectedAllCryptoOrders}
                   indeterminate={selectedSomeCryptoOrders}
                   onChange={handleSelectAllCryptoOrders}
                 />
-              </TableCell>
+              </TableCell> */}
               {/* <TableCell>Movie ID</TableCell> */}
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
@@ -269,7 +264,7 @@ const MovieInventoryTable = ({
                   key={`${movie.id}_${_index}`}
                   selected={isCryptoOrderSelected}
                 >
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
                       checked={isCryptoOrderSelected}
@@ -278,7 +273,7 @@ const MovieInventoryTable = ({
                       }
                       value={isCryptoOrderSelected}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Typography
                       variant="body1"

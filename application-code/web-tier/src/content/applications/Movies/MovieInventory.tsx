@@ -202,7 +202,7 @@ function MovieInventory() {
         >
           <Grid item xs={12}>
             <Card>
-              {movies.length > 0 && <MovieInventoryTable movieInventory={movies} deleteMovieEntry={deleteMovieEntry}/>}
+              <MovieInventoryTable movieInventory={movies} deleteMovieEntry={deleteMovieEntry}/>
             </Card>
           </Grid>
         </Grid>
