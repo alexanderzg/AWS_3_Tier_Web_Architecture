@@ -101,7 +101,7 @@ function MovieInventory() {
   }, []);
 
   const getMovieData = () => {
-    httpRequest(OptionsHttpMethods.GET, `${process.env.REACT_APP_API}/inventory`)
+    httpRequest(OptionsHttpMethods.GET, `/api/inventory`)
     .then((_response) => {
       console.log(_response);
       setMovies(_response);
@@ -112,11 +112,9 @@ function MovieInventory() {
   }
 
   const addMovieEntry = () => {
-    console.log(newMovie);
-    console.log(process.env.REACT_APP_API);
     setMovies((prev) => [{...newMovie, id: movies.length + 1}, ...prev]);
     handleClose();
-    httpRequest(OptionsHttpMethods.POST, `${process.env.REACT_APP_API}/inventory`, newMovie)
+    httpRequest(OptionsHttpMethods.POST, `/api/inventory`, newMovie)
     .then((_response) => {
       console.log(_response);
       getMovieData();
@@ -127,7 +125,7 @@ function MovieInventory() {
 
   const deleteMovieEntry = (movie: MovieEntry) => {
     setMovies((prev) => [...prev.filter((_entry) => _entry.id !== movie.id )]);
-    httpRequest(OptionsHttpMethods.DELETE, `${process.env.REACT_APP_API}/inventory/${movie.id}`)
+    httpRequest(OptionsHttpMethods.DELETE, `/api/inventory/${movie.id}`)
     .then((_response) => {
       console.log(_response);
       getMovieData();
