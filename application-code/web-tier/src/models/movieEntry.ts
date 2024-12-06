@@ -8,5 +8,5 @@ export class MovieEntry {
   year: number = 0;
   tagLine: string = "";
   minutes: number = 0;
-  genres: string[] = [];
+  genres: string = "";
 }

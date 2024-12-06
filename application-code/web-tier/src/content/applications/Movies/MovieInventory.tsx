@@ -1,4 +1,4 @@
-import { Box, Button, Card, Checkbox, Container, Dialog, DialogTitle, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, List, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, Checkbox, Container, Dialog, DialogTitle, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, List, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { MovieEntry } from 'src/models/movieEntry';
 import { subDays } from 'date-fns';
 import useApiService from 'src/hooks/useApiService';
@@ -17,7 +17,7 @@ const MOVIES: MovieEntry[] = [
     coverImg: '',
     description: "In the year 180, the death of emperor Marcus Aurelius throws the Roman Empire into chaos.  Maximus is one of the Roman army's most capable and trusted generals and a key advisor to the emperor.  As Marcus' devious son Commodus ascends to the throne, Maximus is set to be executed.  He escapes, but is captured by slave traders.  Renamed Spaniard and forced to become a gladiator, Maximus must battle to the death with other men for the amusement of paying audiences.",
     rating: 4.11,
-    genres: ["adventure", "action", "drama"],
+    genres: "action",
     year: 2000,
     tagLine: "Awesome",
     minutes: 200
@@ -29,7 +29,7 @@ const MOVIES: MovieEntry[] = [
     coverImg: '',
     description: "Mia, an aspiring actress, serves lattes to movie stars in between auditions and Sebastian, a jazz musician, scrapes by playing cocktail party gigs in dingy bars, but as success mounts they are faced with decisions that begin to fray the fragile fabric of their love affair, and the dreams they worked so hard to maintain in each other threaten to rip them apart.",
     rating: 4.09,
-    genres: ['music', 'drama', 'romance', 'comedy'],
+    genres: 'music',
     year: 2016,
     tagLine: "Awesome",
     minutes: 200
@@ -41,7 +41,7 @@ const MOVIES: MovieEntry[] = [
     coverImg: '',
     description: "A look at the Apollo 11 mission to land on the moon led by commander Neil Armstrong and pilot Buzz Aldrin.",
     rating: 4.09,
-    genres: ['documentary', 'drama', 'history'],
+    genres: 'documentary',
     year: 2019,
     tagLine: "Awesome",
     minutes: 200
@@ -53,7 +53,7 @@ const MOVIES: MovieEntry[] = [
     coverImg: '',
     description: "When Lou Bloom, desperate for work, muscles into the world of L.A. crime journalism, he blurs the line between observer and participant to become the star of his own story. Aiding him in his effort is Nina, a TV-news veteran.",
     rating:4.04,
-    genres: ['drama', 'thriller', 'crime'],
+    genres: 'drama',
     year: 2014,
     tagLine: "Awesome",
     minutes: 200
@@ -65,7 +65,7 @@ const MOVIES: MovieEntry[] = [
     coverImg: '',
     description: "Japan is thrown into a panic after several ships explode and are sunk near Odo Island. An expedition to the island led by paleontologist Professor Kyohei Yemani soon discover something more devastating than imagined in the form of a 50 meter tall monster whom the natives call Gojira. Now the monster begins a rampage that threatens to destroy not only Japan, but the rest of the world as well.",
     rating: 4.04,
-    genres: ['horror'],
+    genres: 'horror',
     year: 1954,
     tagLine: "Awesome",
     minutes: 200
@@ -77,7 +77,7 @@ const MOVIES: MovieEntry[] = [
     coverImg: '',
     description: "Shrek, Fiona and Donkey set off to Far, Far Away to meet Fiona's mother and father. But not everyone is happy. Shrek and the King find it hard to get along, and there's tension in the marriage. The fairy godmother discovers that Shrek has married Fiona instead of her Son Prince Charming and sets about destroying their marriage.",
     rating: 4.04,
-    genres: ['adventure', 'fantasy', 'family', 'animation', 'comedy'],
+    genres: 'adventure',
     year: 2004,
     tagLine: "Awesome",
     minutes: 200
@@ -144,19 +144,7 @@ function MovieInventory() {
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.type === "checkbox") {
-      if (newMovie.genres.some(_g => _g === event.target.name)) {
-        setNewMovie((prev) =>
-          ({...prev, genres: prev.genres.filter((_entry) => _entry !== event.target.name)})
-        )
-      } else {
-        setNewMovie((prev) =>
-          ({...prev, genres: prev.genres.concat(event.target.name)})
-        )
-      }
-    } else {
-      setNewMovie({...newMovie, [event.target.name]: event.target.value });
-    }
+    setNewMovie({...newMovie, [event.target.name]: event.target.value });
   }
 
   const areAllPropertiesFilled = (obj: MovieEntry): boolean => {
@@ -222,24 +210,33 @@ function MovieInventory() {
                 {_entry === "genres" &&
                 <FormControl>
                   <FormLabel component="legend">Genres</FormLabel>
-                  <FormGroup row>
+                  <RadioGroup
+                    row
+                    name="genres"
+                    onChange={handleChange}
+                    value={newMovie.genres}
+                  >
                     <FormControlLabel
-                      control={<Checkbox onChange={handleChange} color="primary" name="action" />}
+                      control={<Radio />}
+                      value="action"
                       label="Action"
                     />
                     <FormControlLabel
-                      control={<Checkbox onChange={handleChange} color="primary" name="horror" />}
+                      control={<Radio />}
+                      value="horror"
                       label="Horror"
                     />
                     <FormControlLabel
-                      control={<Checkbox onChange={handleChange} color="primary" name="comedy" />}
+                      control={<Radio />}
+                      value="comedy"
                       label="Comedy"
                     />
                     <FormControlLabel
-                      control={<Checkbox onChange={handleChange} color="primary" name="drama" />}
+                      control={<Radio />}
+                      value="drama"
                       label="Drama"
                     />
-                  </FormGroup>
+                  </RadioGroup>
                 </FormControl>}
               </Box>
           })}

@@ -40,7 +40,7 @@ interface Filters {
   genre?: any;
 }
 
-const getStatusLabel = (genres: string[]): JSX.Element => {
+const getStatusLabel = (genres: string): JSX.Element => {
   const map = {
     horror: {
       text: 'Horror',
@@ -63,18 +63,12 @@ const getStatusLabel = (genres: string[]): JSX.Element => {
       color: 'info'
     }
   };
-
-    const labels = [];
-    genres.map((_genre, _index) => {
-      try {
-        const { text, color }: any = map[_genre.toLowerCase()];
-        labels.push(<span key={`${_genre}_${_index}`}><Label color={color}>{text.toUpperCase()}</Label>&nbsp;</span>);
-      } catch (e) {
-        labels.push(<span key={`${_genre}_${_index}`}><Label color={"secondary"}>{_genre.toUpperCase()}</Label>&nbsp;</span>);
-      }
-
-    });
-    return <>{labels}</>;
+  try {
+    const { text, color }: any = map[genres.toLowerCase()];
+    return <Label color={color}>{text.toUpperCase()}</Label>;
+  } catch (e) {
+    return <Label color={"secondary"}>{genres.toUpperCase()}</Label>;
+  }
 };
 
 const applyFilters = (
@@ -83,7 +77,7 @@ const applyFilters = (
 ): MovieEntry[] => {
   return movieInventory.filter((movie) => {
     let matches = true;
-    const hasOneOrMore = movie.genres.find((_entry) => _entry === filters.genre);
+    const hasOneOrMore = movie.genres === filters.genre;
     if (filters.genre && !Boolean(hasOneOrMore)) {
       matches = false;
     }
@@ -284,8 +278,6 @@ const MovieInventoryTable = ({
                     >
                       <Button
                         disableRipple
-                        component={RouterLink}
-                        to="/management/profile/details"
                       >
                         {movie.name}
                       </Button>
